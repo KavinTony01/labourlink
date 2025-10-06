@@ -1,0 +1,28 @@
+# Node
+node_modules/
+
+# Angular build
+dist/
+**/dist/
+
+# Environment
+.env
+.env.*
+
+# Logs
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Angular cache
+.angular/
+
+# Misc
+coverage/
+.cache/

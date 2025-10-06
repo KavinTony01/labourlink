@@ -1,0 +1,35 @@
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h2>Login</h2>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input class="form-control" formControlName="username">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-control" formControlName="password">
+      </div>
+      <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+      <button class="btn btn-primary" [disabled]="form.invalid">Login</button>
+    </form>
+
+    <hr>
+    <p *ngIf="!isLoggedIn" class="text-muted">Please contact admin for test credentials.</p>
+    <div *ngIf="isLoggedIn">
+      <p>Seeded test users (id, username, mobile, password = 123):</p>
+      <table class="table table-sm">
+        <thead><tr><th>Id</th><th>Name</th><th>Username</th><th>Mobile</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let u of seededUsers">
+            <td>{{u.id}}</td>
+            <td>{{u.displayName}}</td>
+            <td>{{u.username}}</td>
+            <td>{{u.mobile}}</td>
+            <td>{{u.role}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

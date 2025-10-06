@@ -1,0 +1,4 @@
+<div *ngIf="visibleJobs.length === 0">No jobs found</div>
+<div class="list-group">
+  <app-job-card *ngFor="let j of visibleJobs" [job]="j" [showOnlyOpen]="showOnlyOpen" (book)="onBook($event)"></app-job-card>
+</div>

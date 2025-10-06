@@ -1,0 +1,20 @@
+/* Global styles */
+/* Global styles */
+body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+.app-bg {
+	min-height: 100vh;
+	background-image: url('/assets/worker-handshake.svg');
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+	color: #222;
+}
+.nav-avatar { width:32px; height:32px; border-radius:50%; background:#fff; display:inline-flex; align-items:center; justify-content:center; color:#333; font-weight:700; margin-right:8px }
+
+.container {
+	background: rgba(255,255,255,0.95);
+	border-radius: 8px;
+	box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+	padding: 20px;
+}
+.list-group-item { background: transparent; border: 1px solid #e6e6e6; border-radius: 6px; }

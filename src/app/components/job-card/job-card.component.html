@@ -1,0 +1,14 @@
+<div class="list-group-item mb-2">
+  <div class="d-flex w-100 justify-content-between">
+    <h5 class="mb-1">{{job.type}} - ₹{{job.pay}}</h5>
+    <small>{{job.date}} {{job.time}}</small>
+  </div>
+  <p class="mb-1">{{job.description}}</p>
+  <p class="mb-1"><strong>Location:</strong> {{job.location}}</p>
+  <p class="mb-1"><strong>Status:</strong> {{job.status}} <span *ngIf="job.worker"> - Booked by {{job.worker.displayName}}</span></p>
+  <p *ngIf="job.postedBy" class="mb-1"><strong>Posted by:</strong> {{job.postedBy.displayName}} ({{job.postedBy.mobile}})</p>
+  <p *ngIf="job.worker && job.worker.mobile" class="mb-1"><strong>Worker mobile:</strong> {{job.worker.mobile}}</p>
+  <div *ngIf="job.status === 'open'">
+    <button class="btn btn-primary" (click)="emitBook()">Book</button>
+  </div>
+</div>

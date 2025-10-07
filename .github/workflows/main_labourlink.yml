@@ -1,4 +1,7 @@
-name: Azure Static Web Apps CI/CD - labourlink
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy ASP.Net Core app to Azure Web App - labourlink
 
 on:
   push:
@@ -7,36 +10,56 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_and_deploy_job:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: read #This is required for actions/checkout
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
         with:
-          node-version: '18'
+          dotnet-version: '8.x'
 
-      - name: Install dependencies
-        run: npm ci
-        working-directory: ./frontend
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
 
-      - name: Build Angular app
-        run: npm run build --if-present -- --configuration production
-        working-directory: ./frontend
+      - name: dotnet publish
+        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
-      - name: Upload artifact
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: angular-dist
-          path: frontend/dist/labourlink-frontend
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Deploy to Azure Static Web Apps
-        uses: Azure/static-web-apps-deploy@v1
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    permissions:
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: "upload"
-          app_location: "frontend"
-          api_location: ""
-          output_location: "dist/labourlink-frontend"
+          name: .net-app
+      
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_94EDEF08471A4F84BDAECBDC28E2A6F2 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BE4D97B7CB1E4D94B81D6D031B0769FB }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4CF95DBAACB545A1BE2200434D93B75F }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'labourlink'
+          slot-name: 'Production'
+          package: .
+          

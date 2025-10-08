@@ -10,18 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+
       - name: Install dependencies
         run: npm ci
-        working-directory: ./frontend
+
       - name: Build
-        run: npm run build:ghpages
-        working-directory: ./frontend
+        run: npm run build --if-present -- --configuration production
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./frontend/dist/labourlink-frontend
+          publish_dir: ./dist/labourlink-frontend

@@ -1,0 +1,83 @@
+<div class="modal-backdrop" (click)="closeModal()">
+  <div class="modal-content" *ngIf="job" (click)="$event.stopPropagation()">
+    <!-- Close Button -->
+    <button class="close-btn" (click)="closeModal()">&times;</button>
+
+    <!-- Header -->
+    <div class="job-header">
+      <h2>{{ job.type }}</h2>
+      <span class="badge" [ngClass]="'status-' + job.status">{{ job.status }}</span>
+    </div>
+
+    <!-- Description -->
+    <div class="section">
+      <h3>Description</h3>
+      <p>{{ job.description }}</p>
+    </div>
+
+    <!-- Job Details -->
+    <div class="details-grid">
+      <div class="detail">
+        <span class="label">📍 Location</span>
+        <span class="value">{{ job.location }}</span>
+      </div>
+      <div class="detail">
+        <span class="label">📅 Date</span>
+        <span class="value">{{ job.date }}</span>
+      </div>
+      <div class="detail">
+        <span class="label">⏰ Time</span>
+        <span class="value">{{ job.time }}</span>
+      </div>
+      <div class="detail">
+        <span class="label">💰 Pay</span>
+        <span class="value price">₹{{ job.pay }}</span>
+      </div>
+    </div>
+
+    <!-- Client Info -->
+    <div class="section">
+      <h3>Posted By</h3>
+      <div class="client-info">
+        <div class="avatar-placeholder">{{ job.postedBy.displayName.charAt(0) }}</div>
+        <div class="client-details">
+          <h4>{{ job.postedBy.displayName }}</h4>
+          <p>📧 {{ job.postedBy.username }}</p>
+          <p>📱 {{ job.postedBy.mobile || 'N/A' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Worker Info (if booked) -->
+    <div class="section" *ngIf="job.worker && job.status === 'booked'">
+      <h3>Assigned To</h3>
+      <div class="worker-info">
+        <div class="avatar-placeholder">{{ job.worker.displayName.charAt(0) }}</div>
+        <div class="worker-details">
+          <h4>{{ job.worker.displayName }}</h4>
+          <p>📧 {{ job.worker.username }}</p>
+          <p>📱 {{ job.worker.mobile || 'N/A' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="btn btn-save" (click)="toggleSave()" 
+              [class.saved]="isSaved">
+        {{ isSaved ? '❤️ Saved' : '🤍 Save' }}
+      </button>
+      <button class="btn btn-share" (click)="shareJob()">
+        📤 Share
+      </button>
+      <button class="btn btn-report" (click)="reportJob()">
+        🚩 Report
+      </button>
+      <button class="btn btn-primary" (click)="bookJob()" 
+              *ngIf="canBook && currentUser?.role === 'Worker'"
+              [disabled]="job.status !== 'open'">
+        Book Now
+      </button>
+    </div>
+  </div>
+</div>

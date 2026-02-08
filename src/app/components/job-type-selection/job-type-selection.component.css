@@ -1,0 +1,264 @@
+.job-type-selection {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Category Tabs */
+.category-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #eee;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.category-tab {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.95em;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -13px;
+}
+
+.category-tab:hover {
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+.category-tab.active {
+  color: #0066cc;
+  border-bottom-color: #0066cc;
+}
+
+/* Search Box */
+.search-box {
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95em;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 0 5px rgba(0, 102, 204, 0.2);
+}
+
+/* Job Types List */
+.job-types-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.job-type-item {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.job-type-item:hover {
+  border-color: #0066cc;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
+}
+
+.job-type-item.selected {
+  border-color: #0066cc;
+  background-color: #e7f3ff;
+}
+
+/* Item Header */
+.item-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+}
+
+.icon {
+  font-size: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+}
+
+.item-header .info {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-header h4 {
+  color: #333;
+  margin: 0 0 5px 0;
+  font-size: 1em;
+}
+
+.item-header .description {
+  color: #666;
+  font-size: 0.85em;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  color: #999;
+  font-size: 0.85em;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Item Details */
+.item-details {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.detail-section {
+  margin-bottom: 15px;
+}
+
+.detail-section:last-child {
+  margin-bottom: 0;
+}
+
+.detail-section h5 {
+  color: #333;
+  font-size: 0.9em;
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-section p {
+  color: #666;
+  font-size: 0.9em;
+  margin: 0;
+}
+
+.price-guidance {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #4caf50;
+}
+
+.price-guidance .unit {
+  font-size: 0.9em;
+  color: #999;
+  font-weight: 400;
+}
+
+.insurance-note {
+  color: #ff9800;
+  font-weight: 500;
+  background-color: #fff3e0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin: 0;
+}
+
+/* Skills List */
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skill-tag {
+  background-color: #e3f2fd;
+  color: #1565c0;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 0.85em;
+  font-weight: 500;
+  display: inline-block;
+}
+
+/* Questions List */
+.questions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.questions-list li {
+  color: #666;
+  font-size: 0.9em;
+  padding: 6px 0 6px 20px;
+  position: relative;
+}
+
+.questions-list li:before {
+  content: '•';
+  position: absolute;
+  left: 5px;
+  color: #0066cc;
+  font-weight: bold;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 0.95em;
+}
+
+@media (max-width: 600px) {
+  .job-type-selection {
+    padding: 15px;
+  }
+
+  .category-tabs {
+    gap: 5px;
+  }
+
+  .category-tab {
+    padding: 6px 12px;
+    font-size: 0.9em;
+  }
+
+  .item-header {
+    gap: 10px;
+  }
+
+  .icon {
+    font-size: 1.8em;
+    min-width: 40px;
+  }
+
+  .item-header h4 {
+    font-size: 0.95em;
+  }
+
+  .item-header .description {
+    font-size: 0.8em;
+  }
+}

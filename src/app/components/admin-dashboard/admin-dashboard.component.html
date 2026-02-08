@@ -1,0 +1,103 @@
+<div class="admin-dashboard">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>Admin Dashboard</h1>
+    <p class="subtitle">Platform Overview & Management</p>
+  </div>
+  
+  <!-- Tab Navigation -->
+  <div class="admin-tabs">
+    <button 
+      [class.active]="selectedTab === 'statistics'"
+      (click)="selectTab('statistics')"
+      class="tab-button">
+      📊 Dashboard
+    </button>
+    <button 
+      [class.active]="selectedTab === 'users'"
+      (click)="selectTab('users')"
+      class="tab-button">
+      👥 Users
+    </button>
+    <button 
+      [class.active]="selectedTab === 'jobs'"
+      (click)="selectTab('jobs')"
+      class="tab-button">
+      📋 Jobs
+    </button>
+    <button 
+      [class.active]="selectedTab === 'settings'"
+      (click)="selectTab('settings')"
+      class="tab-button">
+      ⚙️ Settings
+    </button>
+  </div>
+  
+  <!-- Tab Contents -->
+  <div class="tab-container">
+    
+    <!-- Statistics Tab -->
+    <div *ngIf="selectedTab === 'statistics'" class="tab-content statistics-tab">
+      <h2>Platform Statistics</h2>
+      
+      <!-- Key Metrics -->
+      <div class="stats-grid">
+        <app-stat-card icon="👥" label="Total Users" [value]="totalUsers"></app-stat-card>
+        <app-stat-card icon="💼" label="Total Clients" [value]="totalClients"></app-stat-card>
+        <app-stat-card icon="🔨" label="Total Workers" [value]="totalWorkers"></app-stat-card>
+        <app-stat-card icon="📋" label="Total Jobs" [value]="totalJobs"></app-stat-card>
+        <app-stat-card icon="🔓" label="Jobs Open" [value]="jobsOpen"></app-stat-card>
+        <app-stat-card icon="📌" label="Jobs Booked" [value]="jobsBooked"></app-stat-card>
+        <app-stat-card icon="✅" label="Jobs Completed" [value]="jobsCompleted"></app-stat-card>
+        <app-stat-card icon="⭐" label="Avg Rating" [value]="avgRating | number:'1.1-2'"></app-stat-card>
+        <app-stat-card icon="💬" label="Rated Jobs" [value]="ratedJobs"></app-stat-card>
+        <app-stat-card icon="💰" label="Total Revenue" [value]="totalRevenue | currency"></app-stat-card>
+      </div>
+      
+      <!-- Recent Jobs Section -->
+      <div class="summary-section">
+        <h3>Recent Jobs (Last 10)</h3>
+        <table class="summary-table">
+          <thead>
+            <tr>
+              <th>Job ID</th>
+              <th>Type</th>
+              <th>Posted By</th>
+              <th>Status</th>
+              <th>Worker</th>
+              <th>Pay (₹)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let job of jobs.slice(0, 10)">
+              <td>{{ job.id }}</td>
+              <td>{{ job.type }}</td>
+              <td>{{ job.postedBy?.displayName }}</td>
+              <td><span class="badge" [ngClass]="'status-' + job.status">{{ job.status }}</span></td>
+              <td>{{ job.worker?.displayName || '-' }}</td>
+              <td>{{ job.pay }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Users Tab -->
+    <div *ngIf="selectedTab === 'users'" class="tab-content users-tab">
+      <h2>User Management</h2>
+      <app-users-management [users]="users"></app-users-management>
+    </div>
+    
+    <!-- Jobs Tab -->
+    <div *ngIf="selectedTab === 'jobs'" class="tab-content jobs-tab">
+      <h2>Job Management</h2>
+      <app-jobs-management [jobs]="jobs"></app-jobs-management>
+    </div>
+    
+    <!-- Settings Tab -->
+    <div *ngIf="selectedTab === 'settings'" class="tab-content settings-tab">
+      <h2>System Settings</h2>
+      <app-system-settings></app-system-settings>
+    </div>
+  </div>
+</div>

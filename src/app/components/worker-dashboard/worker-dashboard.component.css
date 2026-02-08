@@ -1,0 +1,463 @@
+.worker-dashboard {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.dashboard-header {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #ddd;
+}
+
+.dashboard-header h1 {
+  color: #333;
+  font-size: 2em;
+  margin: 0 0 10px 0;
+}
+
+.dashboard-header .header-subtitle {
+  color: #666;
+  font-size: 0.95em;
+  display: block;
+}
+
+/* Statistics Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+/* Filter Section */
+.filter-section {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filter-section h2 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.3em;
+}
+
+.filter-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-group label {
+  font-weight: 500;
+  color: #333;
+  font-size: 0.95em;
+}
+
+.form-control {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95em;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 0 5px rgba(0, 102, 204, 0.3);
+}
+
+/* Jobs Section */
+.jobs-section {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.jobs-section h2 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.3em;
+}
+
+.jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.job-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  background: white;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.job-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  border-color: #0066cc;
+}
+
+.job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.job-header h3 {
+  color: #333;
+  margin: 0;
+  font-size: 1.1em;
+  flex: 1;
+}
+
+.job-pay {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #4caf50;
+  white-space: nowrap;
+}
+
+.job-description {
+  color: #666;
+  font-size: 0.95em;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.job-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.job-client {
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: #0066cc;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0052a3;
+}
+
+.btn-book {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-size: 0.95em;
+}
+
+/* Booked Jobs Section */
+.booked-section {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.booked-section h2 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.3em;
+}
+
+.jobs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.jobs-table th {
+  background-color: #f5f5f5;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #ddd;
+  color: #333;
+  font-size: 0.95em;
+}
+
+.jobs-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.95em;
+}
+
+.jobs-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.badge.status-booked {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.badge.status-completed {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.badge.status-cancelled {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 5px;
+}
+
+.btn-info {
+  background-color: #0066cc;
+  color: white;
+}
+
+.btn-info:hover {
+  background-color: #0052a3;
+}
+
+.btn-warning {
+  background-color: #ff9800;
+  color: white;
+}
+
+.btn-warning:hover {
+  background-color: #f57c00;
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+  }
+
+  .filter-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .jobs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.5em;
+  }
+
+  .jobs-table {
+    font-size: 0.9em;
+  }
+
+  .jobs-table th,
+  .jobs-table td {
+    padding: 8px;
+  }
+}
+/* Job Detail Modal */
+.job-detail-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.modal-content h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 1.5em;
+}
+
+.modal-content p {
+  margin: 10px 0;
+  color: #666;
+  line-height: 1.6;
+}
+
+.client-info {
+  background: #f5f5f5;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border-left: 4px solid #667eea;
+}
+
+.client-info h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+  justify-content: flex-end;
+}
+
+.modal-actions .btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.modal-actions .btn-primary {
+  background: #667eea;
+  color: white;
+}
+
+.modal-actions .btn-primary:hover {
+  background: #5568d3;
+}
+
+.modal-actions .btn-secondary {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.modal-actions .btn-secondary:hover {
+  background: #e0e0e0;
+}
+
+.modal-actions .btn-success {
+  background: #4caf50;
+  color: white;
+}
+
+.modal-actions .btn-success:hover {
+  background: #388e3c;
+}
+
+/* Status Badges */
+.status-completed {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-booked {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.status-open {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.status-cancelled {
+  background-color: #ffebee;
+  color: #c62828;
+}

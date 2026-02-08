@@ -1,4 +1,33 @@
-<div *ngIf="visibleJobs.length === 0">No jobs found</div>
-<div class="list-group">
-  <app-job-card *ngFor="let j of visibleJobs" [job]="j" [showOnlyOpen]="showOnlyOpen" (book)="onBook($event)"></app-job-card>
+<div class="job-list-container">
+  <!-- Loading State -->
+  <app-loading-state *ngIf="loading" message="Loading jobs..."></app-loading-state>
+
+  <!-- Error State -->
+  <app-error-state 
+    *ngIf="error && !loading"
+    title="Failed to load jobs"
+    [message]="error"
+    (retry)="loadJobs()">
+  </app-error-state>
+
+  <!-- Empty State -->
+  <app-empty-state
+    *ngIf="visibleJobs.length === 0 && !loading && !error"
+    icon="💼"
+    title="No jobs found"
+    message="There are no jobs available right now. Please check back later!"
+    [actionLabel]="showOnlyOpen ? 'View All Jobs' : null"
+    (action)="showOnlyOpen = false">
+  </app-empty-state>
+
+  <!-- Jobs List -->
+  <div class="list-group" *ngIf="visibleJobs.length > 0 && !loading">
+    <app-job-card 
+      *ngFor="let j of visibleJobs" 
+      [job]="j" 
+      [showOnlyOpen]="showOnlyOpen" 
+      (book)="onBook($event)">
+    </app-job-card>
+  </div>
 </div>
+

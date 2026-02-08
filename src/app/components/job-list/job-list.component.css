@@ -1,0 +1,9 @@
+.job-list-container {
+  width: 100%;
+}
+
+.list-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}

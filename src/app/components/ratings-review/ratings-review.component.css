@@ -1,0 +1,399 @@
+.ratings-container {
+  width: 100%;
+}
+
+/* Rating Stats */
+.rating-stats {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.rating-average {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.average-number {
+  font-size: 2.5em;
+  font-weight: 700;
+  color: #333;
+}
+
+.stars {
+  display: flex;
+  gap: 5px;
+}
+
+.stars .star {
+  font-size: 1.3em;
+}
+
+.total-ratings {
+  color: #999;
+  font-size: 0.9em;
+}
+
+.rating-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.breakdown-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.rating-label {
+  width: 50px;
+  text-align: center;
+  font-weight: 600;
+  color: #666;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.count {
+  width: 30px;
+  text-align: right;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Review Form */
+.review-form-container {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 25px;
+  margin-bottom: 30px;
+}
+
+.review-form-container h4 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 1.1em;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.95em;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.star-selector {
+  display: flex;
+  gap: 8px;
+  font-size: 2em;
+}
+
+.star-input {
+  cursor: pointer;
+  opacity: 0.3;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.star-input.hover,
+.star-input.selected {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.rating-text {
+  display: block;
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 8px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.form-actions button {
+  flex: 1;
+}
+
+/* Reviews List */
+.reviews-container {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.reviews-header {
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f9f9f9;
+}
+
+.reviews-header .header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.reviews-header h4 {
+  margin: 0;
+  color: #333;
+}
+
+.review-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 15px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85em;
+  transition: all 0.3s ease;
+}
+
+.filter-btn.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+.filter-btn:hover {
+  border-color: #667eea;
+}
+
+.review-item {
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background 0.2s ease;
+}
+
+.review-item:hover {
+  background: #fafafa;
+}
+
+.review-item:last-child {
+  border-bottom: none;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.reviewer-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9em;
+}
+
+.reviewer-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.review-date {
+  font-size: 0.85em;
+  color: #999;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  font-size: 1.2em;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.delete-btn:hover {
+  color: #d32f2f;
+}
+
+.review-rating {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.review-rating .star {
+  font-size: 1em;
+}
+
+.review-title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 1em;
+}
+
+.review-text {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 12px;
+  font-size: 0.95em;
+}
+
+.review-meta {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.category-badge {
+  display: inline-block;
+  background: #e8f0ff;
+  color: #0066cc;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
+.verified-badge {
+  display: inline-block;
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
+.review-footer {
+  display: flex;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.helpful-btn {
+  background: none;
+  border: 1px solid #ddd;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85em;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.helpful-btn:hover {
+  background: #f5f5f5;
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.show-more {
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.show-more .btn {
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .rating-average {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .review-filters {
+    gap: 8px;
+  }
+
+  .filter-btn {
+    padding: 6px 12px;
+    font-size: 0.8em;
+  }
+
+  .review-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .delete-btn {
+    align-self: flex-end;
+    margin-top: -10px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}

@@ -19,4 +19,7 @@ export interface Job {
     displayName: string;
     mobile?: string;
   };
+  completedDate?: Date; // When job was marked as completed
+  rating?: number; // Rating out of 5
+  review?: string; // Worker review
 }

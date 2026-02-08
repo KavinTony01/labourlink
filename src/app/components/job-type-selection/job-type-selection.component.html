@@ -1,0 +1,79 @@
+<div class="job-type-selection">
+  <!-- Category Tabs -->
+  <div class="category-tabs">
+    <button *ngFor="let category of categories"
+            [class.active]="selectedCategory === category"
+            (click)="selectCategory(category)"
+            class="category-tab">
+      {{ category }}
+    </button>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-box">
+    <input type="text"
+           [(ngModel)]="searchText"
+           placeholder="Search job types..."
+           class="search-input">
+  </div>
+
+  <!-- Job Types List -->
+  <div class="job-types-list">
+    <div *ngIf="getFilteredJobTypes().length === 0" class="empty-state">
+      <p>No job types found in this category.</p>
+    </div>
+
+    <div *ngFor="let jobType of getFilteredJobTypes()"
+         [class.selected]="selectedTypeId === jobType.id"
+         (click)="toggleDetails(jobType)"
+         class="job-type-item">
+      
+      <div class="item-header">
+        <span class="icon">{{ jobType.icon }}</span>
+        <div class="info">
+          <h4>{{ jobType.name }}</h4>
+          <p class="description">{{ jobType.description }}</p>
+        </div>
+        <span class="chevron">{{ showDetails && selectedTypeId === jobType.id ? '▼' : '▶' }}</span>
+      </div>
+
+      <!-- Details (Expandable) -->
+      <div *ngIf="showDetails && selectedTypeId === jobType.id" class="item-details">
+        <div class="detail-section">
+          <h5>Estimated Duration</h5>
+          <p>{{ jobType.estimatedDuration }}</p>
+        </div>
+
+        <div class="detail-section">
+          <h5>Skills Required</h5>
+          <div class="skills-list">
+            <span *ngFor="let skill of jobType.skillsRequired" class="skill-tag">
+              {{ skill }}
+            </span>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h5>Price Guidance</h5>
+          <p class="price-guidance">
+            ₹{{ jobType.priceGuidance.min }} - ₹{{ jobType.priceGuidance.max }}
+            <span class="unit">({{ jobType.priceGuidance.unit }})</span>
+          </p>
+        </div>
+
+        <div class="detail-section" *ngIf="jobType.insuranceRecommended">
+          <p class="insurance-note">⚠️ Insurance Recommended</p>
+        </div>
+
+        <div class="detail-section">
+          <h5>Suggested Questions</h5>
+          <ul class="questions-list">
+            <li *ngFor="let question of jobType.suggestedQuestions">
+              {{ question }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,22 +1,53 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { JobService } from '../../services/job.service';
 import { Job } from '../../models/job.model';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-job-list',
-  templateUrl: './job-list.component.html'
+  templateUrl: './job-list.component.html',
+  styleUrls: ['./job-list.component.css']
 })
-export class JobListComponent {
+export class JobListComponent implements OnInit, OnDestroy {
   jobs: Job[] = [];
+  loading = false;
+  error: string | null = null;
+  
   @Input() showOnlyOpen = false;
   @Input() filter: string = '';
   @Output() book = new EventEmitter<string>();
 
-  constructor(private jobService: JobService) {
-    this.jobService.jobs$.subscribe(j => this.jobs = j);
+  private destroy$ = new Subject<void>();
+
+  constructor(private jobService: JobService) {}
+
+  ngOnInit(): void {
+    this.loadJobs();
   }
 
-  onBook(jobId: string) { this.book.emit(jobId); }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  loadJobs(): void {
+    this.jobService.jobs$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(j => this.jobs = j);
+
+    this.jobService.loading$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(loading => this.loading = loading);
+
+    this.jobService.error$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(error => this.error = error);
+  }
+
+  onBook(jobId: string) { 
+    this.book.emit(jobId); 
+  }
 
   get visibleJobs() {
     let list = this.jobs;

@@ -5,7 +5,8 @@ import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   form: FormGroup;
@@ -29,5 +30,9 @@ export class LoginComponent {
     else if (user?.role === 'Worker') this.router.navigate(['/worker']);
     else if (user?.role === 'Admin') this.router.navigate(['/admin']);
     else this.router.navigate(['/login']);
+  }
+
+  navigateToWelcome() {
+    this.router.navigate(['/welcome']);
   }
 }

@@ -1,0 +1,109 @@
+<div class="users-management">
+  <div class="controls">
+    <input 
+      type="text" 
+      placeholder="Search users by name or username..." 
+      [(ngModel)]="searchText" 
+      (input)="applyFilters()"
+      class="search-input">
+    <select [(ngModel)]="filterRole" (change)="applyFilters()" class="filter-select">
+      <option value="">All Roles</option>
+      <option value="Client">Client</option>
+      <option value="Worker">Worker</option>
+      <option value="Admin">Admin</option>
+    </select>
+    <span class="result-count">{{ filteredUsers.length }} users found</span>
+    <button class="btn-add-user" (click)="openCreateUserModal()">+ Create User</button>
+  </div>
+  
+  <table class="users-table">
+    <thead>
+      <tr>
+        <th>User ID</th>
+        <th>Username</th>
+        <th>Display Name</th>
+        <th>Role</th>
+        <th>Mobile</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredUsers" 
+          [class.selected]="selectedUser?.id === user.id"
+          (click)="selectUser(user)">
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.displayName }}</td>
+        <td><span class="badge" [ngClass]="getRoleClass(user.role)">{{ user.role }}</span></td>
+        <td>{{ user.mobile || 'N/A' }}</td>
+        <td>
+          <button class="btn-sm btn-info" (click)="viewUser(user)">View</button>
+          <button class="btn-sm" [ngClass]="user.disabled ? 'btn-success' : 'btn-danger'" (click)="toggleDisableUser(user)">
+            {{ user.disabled ? 'Enable' : 'Disable' }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div *ngIf="filteredUsers.length === 0" class="empty-state">
+    <p>No users found matching your criteria.</p>
+  </div>
+
+  <!-- Create User Modal -->
+  <div *ngIf="showCreateUserModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Create New User</h3>
+        <button class="close-btn" (click)="closeCreateUserModal()">✕</button>
+      </div>
+      
+      <form [formGroup]="createUserForm" (ngSubmit)="submitCreateUser()" class="modal-form">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-control" formControlName="username" placeholder="Enter username">
+          <span class="error-text" *ngIf="createUserForm.get('username')?.touched && createUserForm.get('username')?.invalid">Username is required</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Display Name</label>
+          <input type="text" class="form-control" formControlName="displayName" placeholder="Enter display name">
+          <span class="error-text" *ngIf="createUserForm.get('displayName')?.touched && createUserForm.get('displayName')?.invalid">Display name is required</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" formControlName="email" placeholder="Enter email">
+          <span class="error-text" *ngIf="createUserForm.get('email')?.touched && createUserForm.get('email')?.invalid">Valid email is required</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Mobile</label>
+          <input type="tel" class="form-control" formControlName="mobile" placeholder="Enter mobile number">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" formControlName="password" placeholder="Enter password">
+          <span class="error-text" *ngIf="createUserForm.get('password')?.touched && createUserForm.get('password')?.invalid">Password is required (min 6 characters)</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Role</label>
+          <select class="form-control" formControlName="role">
+            <option value="">Select a role</option>
+            <option value="Client">Client</option>
+            <option value="Worker">Worker</option>
+            <option value="Admin">Admin</option>
+          </select>
+          <span class="error-text" *ngIf="createUserForm.get('role')?.touched && createUserForm.get('role')?.invalid">Role is required</span>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" (click)="closeCreateUserModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="createUserForm.invalid">Create User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

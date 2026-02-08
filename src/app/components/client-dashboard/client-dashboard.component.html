@@ -1,18 +1,118 @@
-<div class="row">
-  <div class="col-md-6">
-    <h3>Post a Job</h3>
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <div class="mb-2"><input class="form-control" formControlName="type" placeholder="Type (e.g., Cleaning)"></div>
-      <div class="mb-2"><textarea class="form-control" formControlName="description" placeholder="Description"></textarea></div>
-      <div class="mb-2"><input class="form-control" formControlName="location" placeholder="Location"></div>
-      <div class="mb-2"><input type="date" class="form-control" formControlName="date"></div>
-      <div class="mb-2"><input type="time" class="form-control" formControlName="time"></div>
-      <div class="mb-2"><input type="number" class="form-control" formControlName="pay" placeholder="Pay (INR)"></div>
-      <button class="btn btn-success" [disabled]="form.invalid">Post Job</button>
-    </form>
+<div class="client-dashboard">
+  <!-- Header with User Info -->
+  <div class="dashboard-header">
+    <h1>Welcome, {{ currentUser?.displayName }}!</h1>
+    <button class="btn btn-primary" (click)="openPostJobForm()">
+      + Post New Job
+    </button>
   </div>
-  <div class="col-md-6">
-    <h3>Your Posted Jobs</h3>
-    <app-job-list></app-job-list>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <app-stat-card icon="📋" label="Total Jobs Posted" [value]="totalJobsPosted"></app-stat-card>
+    <app-stat-card icon="🔵" label="Active Jobs" [value]="activeJobs"></app-stat-card>
+    <app-stat-card icon="✅" label="Completed Jobs" [value]="completedJobs"></app-stat-card>
+    <app-stat-card icon="💰" label="Total Spent" [value]="totalSpent | currency"></app-stat-card>
+  </div>
+
+  <!-- Filter Tabs -->
+  <div class="filter-tabs">
+    <button [class.active]="selectedFilter === 'all'" (click)="selectedFilter = 'all'">
+      All Jobs
+    </button>
+    <button [class.active]="selectedFilter === 'open'" (click)="selectedFilter = 'open'">
+      Open
+    </button>
+    <button [class.active]="selectedFilter === 'booked'" (click)="selectedFilter = 'booked'">
+      Booked
+    </button>
+    <button [class.active]="selectedFilter === 'completed'" (click)="selectedFilter = 'completed'">
+      Completed
+    </button>
+    <button [class.active]="selectedFilter === 'cancelled'" (click)="selectedFilter = 'cancelled'">
+      Cancelled
+    </button>
+  </div>
+
+  <!-- Jobs List (Table View) -->
+  <div class="jobs-section">
+    <h2>My Jobs</h2>
+    <table class="jobs-table" *ngIf="getFilteredJobs().length > 0">
+      <thead>
+        <tr>
+          <th>Job Type</th>
+          <th>Description</th>
+          <th>Location</th>
+          <th>Date</th>
+          <th>Pay (₹)</th>
+          <th>Status</th>
+          <th>Worker Assigned</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let job of getFilteredJobs()">
+          <td><strong>{{ job.type }}</strong></td>
+          <td>{{ job.description | slice:0:40 }}...</td>
+          <td>{{ job.location }}</td>
+          <td>{{ job.date }}</td>
+          <td>₹{{ job.pay }}</td>
+          <td><span class="badge" [ngClass]="'status-' + job.status">{{ job.status }}</span></td>
+          <td>{{ job.worker?.displayName || 'Not assigned' }}</td>
+          <td>
+            <button class="btn-sm btn-info" (click)="viewJobDetail(job)">View</button>
+            <button class="btn-sm btn-warning" [disabled]="job.status !== 'open'" (click)="editJob(job)">Edit</button>
+            <button class="btn-sm btn-danger" [disabled]="job.status !== 'open'" (click)="cancelJob(job)">Cancel</button>
+            <button class="btn-sm btn-success" [disabled]="job.status !== 'completed'" (click)="reopenJob(job)">Reopen</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="getFilteredJobs().length === 0" class="empty-state">
+      <p>No jobs found. <a href="#" (click)="openPostJobForm()">Post your first job</a></p>
+    </div>
+  </div>
+
+  <!-- Job Detail Modal with Reviews -->
+  <div *ngIf="showJobDetail && selectedJobForDetail" class="job-detail-modal">
+    <div class="modal-content">
+      <button class="close-btn" (click)="closeJobDetail()">✕</button>
+      
+      <h3>{{ selectedJobForDetail.type }}</h3>
+      <p><strong>Description:</strong> {{ selectedJobForDetail.description }}</p>
+      <p><strong>Location:</strong> {{ selectedJobForDetail.location }}</p>
+      <p><strong>Date:</strong> {{ selectedJobForDetail.date }} {{ selectedJobForDetail.time }}</p>
+      <p><strong>Pay:</strong> ₹{{ selectedJobForDetail.pay }}</p>
+      <p><strong>Status:</strong> <span class="badge" [ngClass]="'status-' + selectedJobForDetail.status">{{ selectedJobForDetail.status }}</span></p>
+      
+      <!-- Worker Info and Reviews (only for completed jobs) -->
+      <div *ngIf="selectedJobForDetail.status === 'completed' && selectedJobForDetail.worker" class="worker-section mt-3">
+        <h4>Worker Information</h4>
+        <p><strong>Name:</strong> {{ selectedJobForDetail.worker.displayName }}</p>
+        <p><strong>Mobile:</strong> {{ selectedJobForDetail.worker.mobile }}</p>
+        
+        <!-- Reviews Section -->
+        <div class="reviews-section mt-3">
+          <app-ratings-review 
+            [userId]="selectedJobForDetail.worker.id"
+            [jobId]="selectedJobForDetail.id"
+            [raterRole]="currentUser?.role"
+            [rateeRole]="'Worker'">
+          </app-ratings-review>
+        </div>
+      </div>
+
+      <div class="modal-actions mt-3">
+        <button class="btn btn-secondary" (click)="closeJobDetail()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post Job Modal -->
+  <div *ngIf="showPostJobForm" class="modal-backdrop" (click)="closePostJobForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closePostJobForm()">&times;</button>
+      <app-post-job-form (onSuccess)="closePostJobForm()"></app-post-job-form>
+    </div>
   </div>
 </div>

@@ -1,0 +1,87 @@
+<div class="post-job-form">
+  <h2>Post a New Job</h2>
+  
+  <form [formGroup]="jobForm" (ngSubmit)="submit()" class="job-form">
+    <!-- Job Type Selection Component -->
+    <div class="form-group">
+      <label>Select Job Type <span class="required">*</span></label>
+      <app-job-type-selection
+        [selectedTypeId]="selectedJobType?.id || null"
+        (selectionChange)="onJobTypeSelected($event)">
+      </app-job-type-selection>
+    </div>
+
+    <!-- Price Guidance Display -->
+    <div class="price-guidance-box" *ngIf="priceGuidance">
+      <p><strong>💰 Price Guidance:</strong> ₹{{ priceGuidance.min }} - ₹{{ priceGuidance.max }} ({{ priceGuidance.unit }})</p>
+    </div>
+    
+    <div class="form-group">
+      <label for="description">Description <span class="required">*</span></label>
+      <textarea 
+        id="description" 
+        formControlName="description" 
+        class="form-control" 
+        rows="4"
+        placeholder="Describe the job in detail..."></textarea>
+      <span class="error" *ngIf="description?.invalid && description?.touched">
+        <span *ngIf="description?.errors?.['required']">Description is required</span>
+        <span *ngIf="description?.errors?.['minlength']">Description must be at least 10 characters</span>
+      </span>
+      <span class="char-count">{{ description?.value?.length || 0 }} characters</span>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label for="location">Location <span class="required">*</span></label>
+        <input 
+          id="location" 
+          type="text" 
+          formControlName="location" 
+          class="form-control"
+          placeholder="e.g., Chennai, Bangalore">
+        <span class="error" *ngIf="location?.invalid && location?.touched">Location is required</span>
+      </div>
+      
+      <div class="form-group">
+        <label for="date">Date <span class="required">*</span></label>
+        <input id="date" type="date" formControlName="date" class="form-control">
+        <span class="error" *ngIf="date?.invalid && date?.touched">Date is required</span>
+      </div>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label for="time">Time <span class="required">*</span></label>
+        <input id="time" type="time" formControlName="time" class="form-control">
+        <span class="error" *ngIf="time?.invalid && time?.touched">Time is required</span>
+      </div>
+      
+      <div class="form-group">
+        <label for="pay">Pay (₹) <span class="required">*</span></label>
+        <input 
+          id="pay" 
+          type="number" 
+          formControlName="pay" 
+          class="form-control"
+          placeholder="100 - 50000"
+          min="100"
+          max="50000">
+        <span class="error" *ngIf="pay?.invalid && pay?.touched">
+          <span *ngIf="pay?.errors?.['required']">Pay amount is required</span>
+          <span *ngIf="pay?.errors?.['min']">Minimum pay is ₹100</span>
+          <span *ngIf="pay?.errors?.['max']">Maximum pay is ₹50000</span>
+        </span>
+      </div>
+    </div>
+    
+    <div class="button-group">
+      <button type="submit" class="btn btn-primary" [disabled]="!jobForm.valid || !selectedJobType">
+        Post Job
+      </button>
+      <button type="reset" class="btn btn-secondary" (click)="selectedJobType = null; priceGuidance = null">
+        Clear
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,284 @@
+<div class="welcome-container">
+  <!-- Navigation Bar -->
+  <nav class="welcome-navbar">
+    <div class="navbar-content">
+      <a class="navbar-brand" (click)="scrollToSection('hero')" style="cursor: pointer;">
+        <span class="brand-icon">🔗</span> labourlink
+      </a>
+      <div class="navbar-links">
+        <button class="nav-link" (click)="scrollToSection('features')">Features</button>
+        <button class="nav-link" (click)="scrollToSection('how-it-works')">How It Works</button>
+        <button class="nav-link" (click)="scrollToSection('about')">About</button>
+        <button class="btn btn-primary" (click)="navigateToLogin('Client')">Login</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="hero" class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">Connect with Skilled Professionals</h1>
+        <p class="hero-subtitle">Find trusted workers for your projects or offer your skills to clients</p>
+        
+        <div class="hero-buttons">
+          <button class="btn btn-primary btn-lg" (click)="navigateToLogin('Client')">
+            I'm Looking for Workers
+          </button>
+          <button class="btn btn-outline-primary btn-lg" (click)="navigateToLogin('Worker')">
+            I'm a Skilled Worker
+          </button>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-number">10K+</span>
+            <span class="stat-label">Active Users</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">50K+</span>
+            <span class="stat-label">Jobs Completed</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">4.8★</span>
+            <span class="stat-label">Average Rating</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-image">
+        <div class="hero-illustration">
+          <div class="illustration-box box-1">👨‍💼</div>
+          <div class="illustration-box box-2">🏗️</div>
+          <div class="illustration-box box-3">✅</div>
+          <div class="illustration-box box-4">💰</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <div class="section-header">
+      <h2>Why Choose LabourLink?</h2>
+      <p>Your trusted platform for connecting skilled professionals</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Easy Discovery</h3>
+        <p>Find qualified professionals based on skills, experience, and ratings. Browse through verified profiles with detailed information.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>Safe & Secure</h3>
+        <p>All transactions are secure. Verified identities and secure payment system protect both workers and clients.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">⭐</div>
+        <h3>Ratings & Reviews</h3>
+        <p>Transparent rating system based on real work. Make informed decisions with genuine feedback from previous clients.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h3>Direct Communication</h3>
+        <p>Communicate directly with professionals before hiring. Discuss project details and requirements in real-time.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h3>Mobile Friendly</h3>
+        <p>Access LabourLink from anywhere, anytime. Manage your jobs and profile on the go with our responsive design.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">💼</div>
+        <h3>Professional Support</h3>
+        <p>Dedicated support team ready to help. Get assistance with any issues or questions during your journey.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="how-it-works">
+    <div class="section-header">
+      <h2>How It Works</h2>
+      <p>Simple steps to get started</p>
+    </div>
+
+    <div class="steps-container">
+      <!-- For Clients -->
+      <div class="steps-column">
+        <h3 class="steps-title">👔 For Clients</h3>
+        
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Create Account</h4>
+            <p>Sign up in seconds and set up your profile with your project requirements</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Post a Job</h4>
+            <p>Post your project details, budget, and timeline to get started</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Browse Proposals</h4>
+            <p>Receive proposals from skilled workers and compare their expertise</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Hire & Manage</h4>
+            <p>Hire your chosen professional and collaborate until project completion</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- For Workers -->
+      <div class="steps-column">
+        <h3 class="steps-title">🔧 For Workers</h3>
+        
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Create Account</h4>
+            <p>Sign up and build your professional profile with your skills and experience</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Add Specializations</h4>
+            <p>List your skills, certifications, and areas of expertise</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Browse Jobs</h4>
+            <p>Explore available jobs that match your skills and interests</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Get Hired & Earn</h4>
+            <p>Apply for jobs, get hired, complete work, and earn money securely</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="about">
+    <div class="section-header">
+      <h2>About LabourLink</h2>
+      <p>Empowering connections between skilled professionals and those who need them</p>
+    </div>
+
+    <div class="about-content">
+      <div class="about-text">
+        <p>LabourLink is a trusted platform that connects skilled workers with clients who need their expertise. Whether you're looking to hire a plumber, electrician, designer, or any other professional, or if you want to offer your skills to the world, LabourLink is the perfect place.</p>
+        
+        <p>Our mission is to make finding and hiring skilled professionals simple, safe, and affordable for everyone. We believe in transparent pricing, genuine reviews, and secure transactions.</p>
+
+        <ul class="about-features">
+          <li>✓ Over 10,000 verified professionals</li>
+          <li>✓ 50,000+ successful projects completed</li>
+          <li>✓ 24/7 customer support</li>
+          <li>✓ Secure payment system</li>
+          <li>✓ Satisfaction guarantee</li>
+        </ul>
+      </div>
+
+      <div class="about-image">
+        <div class="about-box">
+          <div class="about-stat">
+            <span class="stat-value">10K+</span>
+            <span class="stat-text">Professionals</span>
+          </div>
+          <div class="about-stat">
+            <span class="stat-value">50K+</span>
+            <span class="stat-text">Projects Done</span>
+          </div>
+          <div class="about-stat">
+            <span class="stat-value">4.8★</span>
+            <span class="stat-text">Avg Rating</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="cta-content">
+      <h2>Ready to Get Started?</h2>
+      <p>Join thousands of satisfied clients and professionals on LabourLink today</p>
+      
+      <div class="cta-buttons">
+        <button class="btn btn-primary btn-lg" (click)="navigateToLogin('Client')">
+          Find a Professional
+        </button>
+        <button class="btn btn-outline-white btn-lg" (click)="navigateToLogin('Worker')">
+          Join as a Professional
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="welcome-footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>LabourLink</h4>
+        <p>Connecting skilled professionals with clients worldwide</p>
+      </div>
+      <div class="footer-section">
+        <h4>For Clients</h4>
+        <ul>
+          <li><a href="#">Browse Professionals</a></li>
+          <li><a href="#">Post a Job</a></li>
+          <li><a href="#">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>For Professionals</h4>
+        <ul>
+          <li><a href="#">Find Jobs</a></li>
+          <li><a href="#">Build Profile</a></li>
+          <li><a href="#">Earnings</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>About</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 LabourLink. All rights reserved.</p>
+    </div>
+  </footer>
+</div>

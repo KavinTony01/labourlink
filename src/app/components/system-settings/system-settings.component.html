@@ -1,0 +1,50 @@
+<div class="system-settings">
+  <h2>System Settings</h2>
+  
+  <div class="settings-form">
+    <div class="form-group">
+      <label>Platform Fee (%)</label>
+      <input type="number" [(ngModel)]="platformFee" class="form-control" min="0" max="100">
+      <small>Commission percentage for each job</small>
+    </div>
+    
+    <div class="form-group">
+      <label>Max Job Duration (days)</label>
+      <input type="number" [(ngModel)]="maxJobDurationDays" class="form-control" min="1" max="365">
+      <small>Maximum duration a job can be posted</small>
+    </div>
+    
+    <div class="form-group">
+      <label>Min Pay Amount (₹)</label>
+      <input type="number" [(ngModel)]="minPayAmount" class="form-control" min="0">
+      <small>Minimum payment allowed for a job</small>
+    </div>
+    
+    <div class="form-group">
+      <label>Max Pay Amount (₹)</label>
+      <input type="number" [(ngModel)]="maxPayAmount" class="form-control" min="0">
+      <small>Maximum payment allowed for a job</small>
+    </div>
+    
+    <div class="form-group checkbox">
+      <label>
+        <input type="checkbox" [(ngModel)]="enableNotifications">
+        Enable Email Notifications
+      </label>
+      <small>Send notifications to users for important events</small>
+    </div>
+    
+    <div class="form-group checkbox">
+      <label>
+        <input type="checkbox" [(ngModel)]="enableReviews">
+        Enable Reviews & Ratings
+      </label>
+      <small>Allow users to review and rate each other</small>
+    </div>
+    
+    <div class="button-group">
+      <button class="btn btn-primary" (click)="saveSettings()">Save Settings</button>
+      <button class="btn btn-secondary" (click)="resetSettings()">Reset to Default</button>
+    </div>
+  </div>
+</div>

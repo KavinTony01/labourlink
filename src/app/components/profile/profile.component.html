@@ -1,16 +1,473 @@
-<div class="row">
-  <div class="col-md-6">
-    <h3>Your Profile</h3>
-    <form [formGroup]="form" (ngSubmit)="save()">
-      <div class="mb-2">
-        <label class="form-label">Display name</label>
-        <input class="form-control" formControlName="displayName">
+<div class="profile-container" *ngIf="currentUser">
+  <!-- Header -->
+  <div class="profile-header">
+    <div class="header-content">
+      <h1>My Profile</h1>
+      <p class="header-subtitle">Manage your account and preferences</p>
+    </div>
+    <button class="btn btn-outline-danger" (click)="logout()">Logout</button>
+  </div>
+
+  <!-- Avatar Section -->
+  <div class="avatar-section">
+    <app-avatar-upload
+      [currentAvatar]="currentUser.avatar"
+      [userName]="currentUser.displayName"
+      (avatarChange)="onAvatarChange($event)">
+    </app-avatar-upload>
+    <div class="user-info-quick">
+      <h2>{{ currentUser.displayName }}</h2>
+      <p class="role-badge" [class]="'role-' + currentUser.role.toLowerCase()">
+        {{ currentUser.role }}
+      </p>
+      <p class="member-since">Member since {{ currentUser.memberSince }}</p>
+    </div>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="tabs-container">
+    <div class="tabs-nav">
+      <button 
+        class="tab-btn"
+        [class.active]="activeTab === 'basic'"
+        (click)="activeTab = 'basic'">
+        👤 Basic Info
+      </button>
+      <button 
+        class="tab-btn"
+        *ngIf="currentUser.role === 'Worker'"
+        [class.active]="activeTab === 'professional'"
+        (click)="activeTab = 'professional'">
+        💼 Professional
+      </button>
+      <button 
+        class="tab-btn"
+        *ngIf="currentUser.role === 'Client'"
+        [class.active]="activeTab === 'business'"
+        (click)="activeTab = 'business'">
+        🏢 Business
+      </button>
+      <button 
+        class="tab-btn"
+        [class.active]="activeTab === 'security'"
+        (click)="activeTab = 'security'">
+        🔒 Security
+      </button>
+      <button 
+        class="tab-btn"
+        [class.active]="activeTab === 'preferences'"
+        (click)="activeTab = 'preferences'">
+        ⚙️ Preferences
+      </button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tabs-content">
+      <!-- Basic Information Tab -->
+      <div class="tab-pane" *ngIf="activeTab === 'basic'">
+        <div class="tab-header">
+          <h2>Basic Information</h2>
+          <button 
+            class="btn btn-sm"
+            [class.btn-secondary]="isEditingBasic"
+            [class.btn-primary]="!isEditingBasic"
+            (click)="isEditingBasic = !isEditingBasic">
+            {{ isEditingBasic ? 'Cancel' : 'Edit' }}
+          </button>
+        </div>
+
+        <form *ngIf="isEditingBasic" [formGroup]="basicForm" (ngSubmit)="saveBasicInfo()">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Display Name</label>
+              <input type="text" class="form-control" formControlName="displayName">
+              <span class="error" *ngIf="basicForm.get('displayName')?.invalid">Display name is required</span>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" class="form-control" formControlName="email">
+              <span class="error" *ngIf="basicForm.get('email')?.invalid">Valid email is required</span>
+            </div>
+            <div class="form-group">
+              <label>Mobile</label>
+              <input type="tel" class="form-control" formControlName="mobile" placeholder="10 digit number">
+              <span class="error" *ngIf="basicForm.get('mobile')?.invalid">10 digit mobile number is required</span>
+            </div>
+            <div class="form-group">
+              <label>Location</label>
+              <input type="text" class="form-control" formControlName="location">
+              <span class="error" *ngIf="basicForm.get('location')?.invalid">Location is required</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Bio (Max 200 characters)</label>
+            <textarea class="form-control" formControlName="bio" rows="4"></textarea>
+            <span class="char-count">{{ basicForm.get('bio')?.value?.length || 0 }}/200</span>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary" [disabled]="basicForm.invalid">
+              Save Changes
+            </button>
+          </div>
+        </form>
+
+        <div *ngIf="!isEditingBasic" class="info-display">
+          <div class="info-item">
+            <span class="label">Display Name:</span>
+            <span class="value">{{ currentUser.displayName }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Email:</span>
+            <span class="value">{{ currentUser.email }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Mobile:</span>
+            <span class="value">{{ currentUser.mobile }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Location:</span>
+            <span class="value">{{ currentUser.location }}</span>
+          </div>
+          <div class="info-item" *ngIf="currentUser.bio">
+            <span class="label">Bio:</span>
+            <span class="value">{{ currentUser.bio }}</span>
+          </div>
+        </div>
       </div>
-      <div class="mb-2">
-        <label class="form-label">Mobile</label>
-        <input class="form-control" formControlName="mobile">
+
+      <!-- Professional Tab (Workers Only) -->
+      <div class="tab-pane" *ngIf="activeTab === 'professional' && currentUser.role === 'Worker'">
+        <div class="tab-header">
+          <h2>Professional Information</h2>
+          <button 
+            class="btn btn-sm"
+            [class.btn-secondary]="isEditingProfessional"
+            [class.btn-primary]="!isEditingProfessional"
+            (click)="isEditingProfessional = !isEditingProfessional">
+            {{ isEditingProfessional ? 'Cancel' : 'Edit' }}
+          </button>
+        </div>
+
+        <form *ngIf="isEditingProfessional" [formGroup]="professionalForm" (ngSubmit)="saveProfessionalInfo()">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Years of Experience</label>
+              <select class="form-control" formControlName="yearsOfExperience">
+                <option *ngFor="let opt of experienceOptions" [value]="opt.value">
+                  {{ opt.label }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Hourly Rate (₹)</label>
+              <input type="number" class="form-control" formControlName="hourlyRate" min="0">
+            </div>
+            <div class="form-group">
+              <label>Availability Status</label>
+              <select class="form-control" formControlName="availabilityStatus">
+                <option *ngFor="let opt of availabilityOptions" [value]="opt.value">
+                  {{ opt.label }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Specializations (comma-separated)</label>
+            <input type="text" class="form-control" formControlName="specializations" placeholder="e.g., Plumbing, Carpentry">
+            <span class="error" *ngIf="professionalForm.get('specializations')?.invalid">Specializations required</span>
+          </div>
+
+          <div class="form-group">
+            <label>Languages (comma-separated)</label>
+            <input type="text" class="form-control" formControlName="languages" placeholder="e.g., English, Hindi, Tamil">
+            <span class="error" *ngIf="professionalForm.get('languages')?.invalid">Languages required</span>
+          </div>
+
+          <div class="form-group">
+            <label>Certifications/Licenses</label>
+            <textarea class="form-control" formControlName="certifications" rows="3"></textarea>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary" [disabled]="professionalForm.invalid">
+              Save Changes
+            </button>
+          </div>
+        </form>
+
+        <div *ngIf="!isEditingProfessional" class="info-display">
+          <div class="info-item">
+            <span class="label">Years of Experience:</span>
+            <span class="value">{{ currentUser.yearsOfExperience }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Specializations:</span>
+            <span class="value">{{ currentUser.specializations || '-' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Languages:</span>
+            <span class="value">{{ currentUser.languages || '-' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Hourly Rate:</span>
+            <span class="value">₹{{ currentUser.hourlyRate || 'Not set' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Availability:</span>
+            <span class="value status-badge" [class]="'status-' + (currentUser.availabilityStatus || 'unknown')">
+              {{ currentUser.availabilityStatus || '-' }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Professional Stats -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-value">{{ currentUser.jobsCompleted || 0 }}</span>
+            <span class="stat-label">Jobs Completed</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">{{ currentUser.successRate || 0 }}%</span>
+            <span class="stat-label">Success Rate</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">{{ (currentUser.avgRating || 0).toFixed(1) }}</span>
+            <span class="stat-label">Avg Rating</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">₹{{ (currentUser.totalEarnings || 0).toLocaleString() }}</span>
+            <span class="stat-label">Total Earnings</span>
+          </div>
+        </div>
       </div>
-      <button class="btn btn-primary" [disabled]="form.invalid">Save</button>
-    </form>
+
+      <!-- Business Tab (Clients Only) -->
+      <div class="tab-pane" *ngIf="activeTab === 'business' && currentUser.role === 'Client'">
+        <div class="tab-header">
+          <h2>Business Information</h2>
+          <button 
+            class="btn btn-sm"
+            [class.btn-secondary]="isEditingBusiness"
+            [class.btn-primary]="!isEditingBusiness"
+            (click)="isEditingBusiness = !isEditingBusiness">
+            {{ isEditingBusiness ? 'Cancel' : 'Edit' }}
+          </button>
+        </div>
+
+        <form *ngIf="isEditingBusiness" [formGroup]="businessForm" (ngSubmit)="saveBusinessInfo()">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Company Name</label>
+              <input type="text" class="form-control" formControlName="companyName">
+              <span class="error" *ngIf="businessForm.get('companyName')?.invalid">Company name required</span>
+            </div>
+            <div class="form-group">
+              <label>Business Type</label>
+              <select class="form-control" formControlName="businessType">
+                <option *ngFor="let opt of businessTypeOptions" [value]="opt.value">
+                  {{ opt.label }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Industry</label>
+              <input type="text" class="form-control" formControlName="industry" placeholder="e.g., Construction, Services">
+              <span class="error" *ngIf="businessForm.get('industry')?.invalid">Industry required</span>
+            </div>
+            <div class="form-group">
+              <label>Website (Optional)</label>
+              <input type="url" class="form-control" formControlName="website" placeholder="https://example.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Business Address</label>
+            <input type="text" class="form-control" formControlName="businessAddress">
+            <span class="error" *ngIf="businessForm.get('businessAddress')?.invalid">Address required</span>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary" [disabled]="businessForm.invalid">
+              Save Changes
+            </button>
+          </div>
+        </form>
+
+        <div *ngIf="!isEditingBusiness" class="info-display">
+          <div class="info-item">
+            <span class="label">Company Name:</span>
+            <span class="value">{{ currentUser.companyName || '-' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Business Type:</span>
+            <span class="value">{{ currentUser.businessType || '-' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Industry:</span>
+            <span class="value">{{ currentUser.industry || '-' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Business Address:</span>
+            <span class="value">{{ currentUser.businessAddress || '-' }}</span>
+          </div>
+          <div class="info-item" *ngIf="currentUser.website">
+            <span class="label">Website:</span>
+            <span class="value"><a [href]="currentUser.website" target="_blank">{{ currentUser.website }}</a></span>
+          </div>
+        </div>
+
+        <!-- Business Stats -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-value">{{ currentUser.jobsPosted || 0 }}</span>
+            <span class="stat-label">Jobs Posted</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">₹{{ (currentUser.totalSpent || 0).toLocaleString() }}</span>
+            <span class="stat-label">Total Spent</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">{{ currentUser.workerSatisfaction || 0 }}%</span>
+            <span class="stat-label">Worker Satisfaction</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">{{ currentUser.repeatBooking || 0 }}%</span>
+            <span class="stat-label">Repeat Booking</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Tab -->
+      <div class="tab-pane" *ngIf="activeTab === 'security'">
+        <div class="tab-header">
+          <h2>Security Settings</h2>
+        </div>
+
+        <form [formGroup]="securityForm" (ngSubmit)="changePassword()" class="security-form">
+          <div class="security-notice">
+            <strong>🔐 Change Password</strong>
+            <p>Update your password to keep your account secure.</p>
+          </div>
+
+          <div class="form-group">
+            <label>Current Password</label>
+            <input type="password" class="form-control" formControlName="currentPassword">
+            <span class="error" *ngIf="securityForm.get('currentPassword')?.invalid">Current password required</span>
+          </div>
+
+          <div class="form-group">
+            <label>New Password</label>
+            <input type="password" class="form-control" formControlName="newPassword" placeholder="Min. 8 characters">
+            <span class="error" *ngIf="securityForm.get('newPassword')?.invalid">Password must be at least 8 characters</span>
+          </div>
+
+          <div class="form-group">
+            <label>Confirm New Password</label>
+            <input type="password" class="form-control" formControlName="confirmPassword">
+            <span class="error" *ngIf="securityForm.hasError('passwordMismatch') && securityForm.get('confirmPassword')?.touched">
+              Passwords do not match
+            </span>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary" [disabled]="securityForm.invalid || isSavingPassword">
+              {{ isSavingPassword ? 'Updating...' : 'Change Password' }}
+            </button>
+          </div>
+        </form>
+
+        <div class="security-info">
+          <h3>Security Info</h3>
+          <div class="info-item">
+            <span class="label">Account Status:</span>
+            <span class="value status-badge status-active">Active</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Two-Factor Authentication:</span>
+            <span class="value status-badge status-inactive">Not Enabled</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Last Login:</span>
+            <span class="value">Today</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preferences Tab -->
+      <div class="tab-pane" *ngIf="activeTab === 'preferences'">
+        <div class="tab-header">
+          <h2>Notification Preferences</h2>
+        </div>
+
+        <form [formGroup]="preferencesForm" (ngSubmit)="savePreferences()">
+          <div class="preferences-section">
+            <h3>Notifications</h3>
+            
+            <div class="preference-item">
+              <div class="preference-label">
+                <label class="checkbox-label">
+                  <input type="checkbox" formControlName="emailNotifications">
+                  <span>Email Notifications</span>
+                </label>
+                <p class="preference-desc">Receive job updates and messages via email</p>
+              </div>
+            </div>
+
+            <div class="preference-item">
+              <div class="preference-label">
+                <label class="checkbox-label">
+                  <input type="checkbox" formControlName="jobAlerts">
+                  <span>Job Alerts</span>
+                </label>
+                <p class="preference-desc">Get notified about new job opportunities</p>
+              </div>
+            </div>
+
+            <div class="preference-item">
+              <div class="preference-label">
+                <label class="checkbox-label">
+                  <input type="checkbox" formControlName="messageNotifications">
+                  <span>Message Notifications</span>
+                </label>
+                <p class="preference-desc">Notify me of new messages and conversations</p>
+              </div>
+            </div>
+
+            <div class="preference-item">
+              <div class="preference-label">
+                <label class="checkbox-label">
+                  <input type="checkbox" formControlName="smsAlerts">
+                  <span>SMS Alerts</span>
+                </label>
+                <p class="preference-desc">Receive critical updates via SMS</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="preferences-section">
+            <h3>Privacy</h3>
+            
+            <div class="preference-item">
+              <div class="preference-label">
+                <label class="checkbox-label">
+                  <input type="checkbox" formControlName="privacyMode">
+                  <span>Privacy Mode</span>
+                </label>
+                <p class="preference-desc">Hide your profile from public listings</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary">
+              Save Preferences
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>

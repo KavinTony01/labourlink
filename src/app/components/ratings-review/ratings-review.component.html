@@ -1,0 +1,176 @@
+<div class="ratings-container">
+  <!-- Loading State -->
+  <app-loading-state *ngIf="loading"></app-loading-state>
+
+  <!-- Error State -->
+  <app-error-state 
+    *ngIf="error && !loading"
+    title="Failed to load reviews"
+    [message]="error"
+    (retry)="userId ? loadUserRatings() : loadJobRatings()">
+  </app-error-state>
+
+  <!-- Rating Stats (for user profile) -->
+  <div *ngIf="ratingStats && userId && !loading" class="rating-stats">
+    <div class="rating-average">
+      <span class="average-number">{{ ratingStats.averageRating }}</span>
+      <div class="stars">
+        <span *ngFor="let star of getStarArray(Math.round(ratingStats.averageRating))" class="star">⭐</span>
+      </div>
+      <span class="total-ratings">({{ ratingStats.totalRatings }} reviews)</span>
+    </div>
+
+    <!-- Rating Breakdown -->
+    <div class="rating-breakdown">
+      <div *ngFor="let count of [5, 4, 3, 2, 1]" class="breakdown-row">
+        <span class="rating-label">{{ count }} ⭐</span>
+        <div class="progress-bar">
+          <div class="progress-fill" 
+               [style.width]="(ratingStats.ratingBreakdown[count === 5 ? 'fiveStar' : count === 4 ? 'fourStar' : count === 3 ? 'threeStar' : count === 2 ? 'twoStar' : 'oneStar'] / ratingStats.totalRatings * 100) + '%'">
+          </div>
+        </div>
+        <span class="count">{{ ratingStats.ratingBreakdown[count === 5 ? 'fiveStar' : count === 4 ? 'fourStar' : count === 3 ? 'threeStar' : count === 2 ? 'twoStar' : 'oneStar'] }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <app-empty-state
+    *ngIf="ratings.length === 0 && !loading && !error && !canRate"
+    icon="🔒"
+    title="Cannot Rate"
+    message="Only clients can rate workers on completed jobs">
+  </app-empty-state>
+
+  <app-empty-state
+    *ngIf="ratings.length === 0 && !loading && !error && canRate"
+    icon="⭐"
+    title="No reviews yet"
+    message="Be the first to review this worker!"
+    actionLabel="Write a Review"
+    (action)="showForm = true">
+  </app-empty-state>
+
+  <!-- Submit Review Form -->
+  <div *ngIf="userId && canRate && (showForm || ratings.length === 0)" class="review-form-container">
+    <h4>{{ showForm ? 'Write a Review' : 'Be the First to Review' }}</h4>
+    <form [formGroup]="ratingForm" (ngSubmit)="submitRating()" class="review-form">
+      <!-- Rating Stars -->
+      <div class="form-group">
+        <label>Rating</label>
+        <div class="star-selector">
+          <span *ngFor="let i of [1, 2, 3, 4, 5]" 
+                class="star-input"
+                [class.selected]="i <= ratingForm.get('rating')?.value"
+                [class.hover]="i <= hoverRating"
+                (click)="setRating(i)"
+                (mouseenter)="hoverRating = i"
+                (mouseleave)="hoverRating = 0">
+            ⭐
+          </span>
+        </div>
+        <span *ngIf="ratingForm.get('rating')?.value" class="rating-text">
+          {{ ratingForm.get('rating')?.value }} out of 5 stars
+        </span>
+      </div>
+
+      <!-- Title -->
+      <div class="form-group">
+        <label>Review Title</label>
+        <input type="text" class="form-control" formControlName="title" placeholder="Summarize your experience">
+      </div>
+
+      <!-- Review Text -->
+      <div class="form-group">
+        <label>Your Review</label>
+        <textarea class="form-control" formControlName="review" rows="4" placeholder="Share details about your experience..."></textarea>
+      </div>
+
+      <!-- Category -->
+      <div class="form-group">
+        <label>Category (Optional)</label>
+        <select class="form-control" formControlName="category">
+          <option value="overall">Overall</option>
+          <option value="communication">Communication</option>
+          <option value="professionalism">Professionalism</option>
+          <option value="quality">Quality of Work</option>
+          <option value="timeliness">Timeliness</option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="ratingForm.invalid">
+          Submit Review
+        </button>
+        <button type="button" class="btn btn-outline-secondary" (click)="showForm = false">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Reviews List -->
+  <div *ngIf="ratings.length > 0 && !loading" class="reviews-container">
+    <div class="reviews-header" *ngIf="jobId">
+      <div class="header-row">
+        <h4>Reviews ({{ ratings.length }})</h4>
+        <button *ngIf="canRate && !showForm" (click)="showForm = true" class="btn btn-sm btn-primary">
+          + Write a Review
+        </button>
+      </div>
+      <div class="review-filters">
+        <button [class.active]="selectedFilter === 'recent'" (click)="filterReviews('recent')" class="filter-btn">
+          Recent
+        </button>
+        <button [class.active]="selectedFilter === 'highest'" (click)="filterReviews('highest')" class="filter-btn">
+          Highest Rated
+        </button>
+        <button [class.active]="selectedFilter === 'lowest'" (click)="filterReviews('lowest')" class="filter-btn">
+          Lowest Rated
+        </button>
+        <button [class.active]="selectedFilter === 'helpful'" (click)="filterReviews('helpful')" class="filter-btn">
+          Most Helpful
+        </button>
+      </div>
+    </div>
+
+    <div class="review-item" *ngFor="let review of ratings">
+      <div class="review-header">
+        <div class="reviewer-info">
+          <div class="avatar">{{ review.fromUserId.charAt(0) }}</div>
+          <div>
+            <div class="reviewer-name">{{ review.fromUserId }}</div>
+            <div class="review-date">{{ review.createdAt | date: 'short' }}</div>
+          </div>
+        </div>
+        <button *ngIf="userId" (click)="deleteRating(review.id)" class="delete-btn" title="Delete review">
+          ✕
+        </button>
+      </div>
+
+      <div class="review-rating">
+        <span *ngFor="let star of getStarArray(review.rating)" class="star">⭐</span>
+      </div>
+
+      <div class="review-title">{{ review.title }}</div>
+      <div class="review-text">{{ review.review }}</div>
+
+      <div class="review-meta">
+        <span *ngIf="review.category" class="category-badge">{{ review.category }}</span>
+        <span *ngIf="review.verified" class="verified-badge">✓ Verified</span>
+      </div>
+
+      <div class="review-footer">
+        <button (click)="markHelpful(review.id)" class="helpful-btn">
+          👍 Helpful ({{ review.helpful || 0 }})
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="ratings.length >= 5 && jobId" class="show-more">
+      <button (click)="toggleShowAllReviews()" class="btn btn-outline-primary">
+        {{ showAllReviews ? 'Show Less' : 'Show All Reviews' }}
+      </button>
+    </div>
+  </div>
+</div>

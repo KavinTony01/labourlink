@@ -1,11 +1,163 @@
-<div class="row">
-  <div class="col-md-12">
-    <div class="d-flex justify-content-between align-items-center">
-      <h3>Open Jobs</h3>
-      <div class="w-25">
-        <input class="form-control" placeholder="Search by type/location" [(ngModel)]="filter">
+<div class="worker-dashboard">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>Welcome, {{ currentUser?.displayName }}!</h1>
+    <span class="header-subtitle">Find and book jobs</span>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <app-stat-card icon="🔓" label="Available Jobs" [value]="availableCount"></app-stat-card>
+    <app-stat-card icon="📌" label="Booked Jobs" [value]="bookedCount"></app-stat-card>
+    <app-stat-card icon="✅" label="Completed Jobs" [value]="completedCount"></app-stat-card>
+    <app-stat-card icon="💰" label="Monthly Earnings" [value]="monthlyEarnings | currency"></app-stat-card>
+  </div>
+
+  <!-- Filter Section -->
+  <div class="filter-section">
+    <h2>Search Jobs</h2>
+    <div class="filter-controls">
+      <div class="filter-group">
+        <label>Job Type:</label>
+        <select [(ngModel)]="selectedJobType" class="form-control">
+          <option value="">All Types</option>
+          <option *ngFor="let type of jobTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label>Location:</label>
+        <input type="text" [(ngModel)]="selectedLocation" placeholder="Enter location" class="form-control">
+      </div>
+      
+      <div class="filter-group">
+        <label>Search:</label>
+        <input type="text" [(ngModel)]="searchText" placeholder="Search jobs..." class="form-control">
       </div>
     </div>
-    <app-job-list [showOnlyOpen]="true" [filter]="filter" (book)="book($event)"></app-job-list>
+  </div>
+
+  <!-- Available Jobs -->
+  <div class="jobs-section">
+    <h2>Available Jobs ({{ getFilteredJobs().length }})</h2>
+    
+    <div *ngIf="getFilteredJobs().length === 0" class="empty-state">
+      <p>No jobs available matching your criteria.</p>
+    </div>
+    
+    <div *ngIf="getFilteredJobs().length > 0" class="jobs-grid">
+      <div *ngFor="let job of getFilteredJobs()" class="job-card">
+        <div class="job-header">
+          <h3>{{ job.type }}</h3>
+          <span class="job-pay">₹{{ job.pay }}</span>
+        </div>
+        
+        <p class="job-description">{{ job.description }}</p>
+        
+        <div class="job-meta">
+          <span class="meta-item">📍 {{ job.location }}</span>
+          <span class="meta-item">📅 {{ job.date }}</span>
+          <span class="meta-item">⏰ {{ job.time }}</span>
+        </div>
+        
+        <div class="job-client">
+          <small>Posted by: <strong>{{ job.postedBy.displayName }}</strong></small>
+        </div>
+        
+        <button class="btn btn-primary btn-book" (click)="bookJob(job)">
+          Book Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booked Jobs Section -->
+  <div class="booked-section" *ngIf="bookedJobs.length > 0">
+    <h2>My Booked Jobs</h2>
+    <table class="jobs-table">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Client</th>
+          <th>Location</th>
+          <th>Date</th>
+          <th>Pay (₹)</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let job of bookedJobs">
+          <td>{{ job.type }}</td>
+          <td>{{ job.postedBy.displayName }}</td>
+          <td>{{ job.location }}</td>
+          <td>{{ job.date }}</td>
+          <td>₹{{ job.pay }}</td>
+          <td><span class="badge" [ngClass]="'status-' + job.status">{{ job.status }}</span></td>
+          <td>
+            <button class="btn-sm btn-info" (click)="viewJobDetail(job)">View</button>
+            <button class="btn-sm btn-warning" (click)="contactClient(job)">Contact Client</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Job Detail Modal -->
+    <div *ngIf="showJobDetail && selectedJobForDetail" class="job-detail-modal">
+      <div class="modal-content">
+        <button class="close-btn" (click)="closeJobDetail()">✕</button>
+        
+        <h3>{{ selectedJobForDetail.type }}</h3>
+        <p><strong>Description:</strong> {{ selectedJobForDetail.description }}</p>
+        <p><strong>Location:</strong> {{ selectedJobForDetail.location }}</p>
+        <p><strong>Date:</strong> {{ selectedJobForDetail.date }} {{ selectedJobForDetail.time }}</p>
+        <p><strong>Pay:</strong> ₹{{ selectedJobForDetail.pay }}</p>
+        <p><strong>Status:</strong> <span class="badge" [ngClass]="'status-' + selectedJobForDetail.status">{{ selectedJobForDetail.status }}</span></p>
+        
+        <div class="client-info">
+          <h4>Client Information</h4>
+          <p><strong>Name:</strong> {{ selectedJobForDetail.postedBy.displayName }}</p>
+          <p><strong>Mobile:</strong> {{ selectedJobForDetail.postedBy.mobile }}</p>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-success" (click)="markJobComplete(selectedJobForDetail)">Mark Complete</button>
+          <button class="btn btn-primary" (click)="contactClient(selectedJobForDetail)">Contact Client</button>
+          <button class="btn btn-secondary" (click)="closeJobDetail()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Completed Jobs Section -->
+  <div class="jobs-section" *ngIf="completedJobs.length > 0">
+    <h2>✓ Completed Jobs ({{ completedJobs.length }})</h2>
+    <table class="jobs-table">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Client</th>
+          <th>Location</th>
+          <th>Completed Date</th>
+          <th>Pay (₹)</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let job of completedJobs">
+          <td>{{ job.type }}</td>
+          <td>{{ job.postedBy.displayName }}</td>
+          <td>{{ job.location }}</td>
+          <td>{{ job.completedDate | date: 'short' }}</td>
+          <td>₹{{ job.pay }}</td>
+          <td><span class="badge status-completed">{{ job.status }}</span></td>
+          <td>
+            <button class="btn-sm btn-info" (click)="viewJobDetail(job)">View</button>
+            <button class="btn-sm btn-primary" (click)="contactClient(job)">Contact</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
